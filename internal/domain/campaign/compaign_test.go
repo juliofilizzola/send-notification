@@ -2,22 +2,40 @@ package campaign
 
 import (
 	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestNewCampaign(t *testing.T) {
-	name := "campaign 1"
-	content := "body..."
-	contacts := []string{"email@test.com", "email2@test.com"}
+var (
+	name     = "campaign 1"
+	content  = "body..."
+	contacts = []string{"email@test.com", "email2@test.com"}
+)
+
+func Test_NewCampaign_Create(t *testing.T) {
+	asserts := assert.New(t)
 
 	campaign := NewCampaign(name, content, contacts)
 
-	if campaign.ID != "1" {
-		t.Errorf("expect 1")
-	} else if campaign.Name != name {
-		t.Errorf("expect correct name")
-	} else if campaign.Content != content {
-		t.Errorf("expect correct content")
-	} else if len(campaign.Contact) != len(contacts) {
-		t.Errorf("error...")
-	}
+	asserts.Equal(campaign.Name, name)
+	asserts.Equal(campaign.Content, content)
+	asserts.Equal(len(campaign.Contact), len(contacts))
+}
+
+func Test_NewCampaign_IdOnNotNil(t *testing.T) {
+	assertions := assert.New(t)
+
+	campaign := NewCampaign(name, content, contacts)
+
+	assertions.NotNil(campaign.ID)
+}
+
+func Test_NewCampaign_CreateOnNow(t *testing.T) {
+	assertions := assert.New(t)
+	campaign := NewCampaign(name, content, contacts)
+	now := time.Now().Add(-time.Minute)
+
+	assertions.NotNil(campaign.CreatedAt)
+	assertions.Greater(campaign.CreatedAt, now)
 }
