@@ -15,6 +15,9 @@ func (s Service) Create(newCampaign dto.NewCampaign) (string, error) {
 	if err != nil {
 		return "", errors.New(err.Error())
 	}
-
+	err = s.Repository.Save(campaign)
+	if err != nil {
+		return "", err
+	}
 	return campaign.ID, nil
 }
