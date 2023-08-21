@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/juliofilizzola/send-notification/internal/dto"
-	internalerrors "github.com/juliofilizzola/send-notification/internal/internal-errors"
+	"github.com/juliofilizzola/send-notification/internal/internalErrors"
 )
 
 type Service struct {
@@ -18,7 +18,7 @@ func (s Service) Create(newCampaign dto.NewCampaign) (string, error) {
 	}
 	err = s.Repository.Save(campaign)
 	if err != nil {
-		return "", internalerrors.ErrInternal
+		return "", internalErrors.ErrInternal
 	}
 	return campaign.ID, nil
 }
