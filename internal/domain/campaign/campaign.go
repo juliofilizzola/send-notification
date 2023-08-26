@@ -3,6 +3,7 @@ package campaign
 import (
 	"time"
 
+	"github.com/juliofilizzola/send-notification/internal/internalErrors"
 	"github.com/rs/xid"
 )
 
@@ -24,11 +25,18 @@ func NewCampaign(name, content string, emails []string) (*Campaign, error) {
 	for index, email := range emails {
 		contacts[index].Email = email
 	}
-	return &Campaign{
+	campaign := &Campaign{
 		ID:        xid.New().String(),
 		Name:      name,
 		Content:   content,
 		CreatedAt: time.Now(),
 		Contact:   contacts,
-	}, nil
+	}
+	err := internalErrors.ValidatorStruct(campaign)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return campaign, nil
 }
